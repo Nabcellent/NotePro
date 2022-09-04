@@ -13,70 +13,69 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-public class RegisterActivity extends AppCompatActivity {
-    EditText emailInput, passwordInput, passwordConfirmationInput;
-    Button registerBtn;
+public class LoginActivity extends AppCompatActivity {
+    EditText emailInput, passwordInput;
+    Button loginBtn;
     ProgressBar progressBar;
-    TextView viewLoginBtn;
+    TextView viewRegisterBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
+        setContentView(R.layout.activity_login);
 
         emailInput = findViewById(R.id.email);
         passwordInput = findViewById(R.id.password);
-        passwordConfirmationInput = findViewById(R.id.password_confirmation);
-        registerBtn = findViewById(R.id.register_btn);
+        loginBtn = findViewById(R.id.login_btn);
         progressBar = findViewById(R.id.progress_bar);
-        viewLoginBtn = findViewById(R.id.view_login_btn);
+        viewRegisterBtn = findViewById(R.id.view_register_btn);
 
-        registerBtn.setOnClickListener(view -> register());
-        viewLoginBtn.setOnClickListener(v -> startActivity(new Intent(this, LoginActivity.class)));
+        loginBtn.setOnClickListener(view -> login());
+        viewRegisterBtn.setOnClickListener(v -> startActivity(new Intent(this, RegisterActivity.class)));
     }
 
-    void register() {
+    void login() {
         String email = emailInput.getText().toString();
         String password = passwordInput.getText().toString();
-        String passwordConfirmation = passwordConfirmationInput.getText().toString();
 
-        boolean isValidated = validate(email, password, passwordConfirmation);
+        boolean isValidated = validate(email, password);
 
         if (!isValidated) return;
 
-        createFirebaseAccount(email, password);
+        loginToFirebase(email, password);
     }
 
-    void createFirebaseAccount(String email, String password) {
+    void loginToFirebase(String email, String password) {
         changeInProgress(true);
 
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, task -> {
-            if (task.isSuccessful()) {
-                Utility.showToast(this, "Account created successfully! Verify email.");
+        firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+            changeInProgress(false);
 
-                firebaseAuth.getCurrentUser().sendEmailVerification();
-                firebaseAuth.signOut();
-                finish();
+            if (task.isSuccessful()) {
+                if (firebaseAuth.getCurrentUser().isEmailVerified()) {
+                    startActivity(new Intent(this, MainActivity.class));
+                    finish();
+                } else {
+                    Utility.showToast(this, "Email not verified.");
+                }
             } else {
                 Utility.showToast(this, task.getException().getLocalizedMessage());
             }
-
-            changeInProgress(false);
         });
     }
 
     void changeInProgress(boolean inProgress) {
         if (inProgress) {
-            registerBtn.setVisibility(View.GONE);
+            loginBtn.setVisibility(View.GONE);
             progressBar.setVisibility(View.VISIBLE);
         } else {
             progressBar.setVisibility(View.GONE);
-            registerBtn.setVisibility(View.VISIBLE);
+            loginBtn.setVisibility(View.VISIBLE);
         }
     }
 
-    boolean validate(String email, String password, String passwordConfirmation) {
+    boolean validate(String email, String password) {
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             emailInput.setError("Invalid email.");
             return false;
@@ -84,11 +83,6 @@ public class RegisterActivity extends AppCompatActivity {
 
         if (password.length() < 6) {
             passwordInput.setError("Password must be more than 6 characters.");
-            return false;
-        }
-
-        if (!password.equals(passwordConfirmation)) {
-            passwordConfirmationInput.setError("Passwords do not match.");
             return false;
         }
 
