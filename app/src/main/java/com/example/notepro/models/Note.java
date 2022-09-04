@@ -3,9 +3,9 @@ package com.example.notepro.models;
 import com.google.firebase.Timestamp;
 
 public class Note {
-    String title;
-    String content;
-    Timestamp timestamp;
+    public String title;
+    public String content;
+    public Timestamp timestamp;
 
     public Note() {
 

@@ -1,4 +1,4 @@
-package com.example.notepro;
+package com.example.notepro.pages.auth;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.notepro.R;
+import com.example.notepro.utils.Helpers;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -53,13 +55,13 @@ public class RegisterActivity extends AppCompatActivity {
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, task -> {
             if (task.isSuccessful()) {
-                Utility.showToast(this, "Account created successfully! Verify email.");
+                Helpers.showToast(this, "Account created successfully! Verify email.");
 
                 firebaseAuth.getCurrentUser().sendEmailVerification();
                 firebaseAuth.signOut();
                 finish();
             } else {
-                Utility.showToast(this, task.getException().getLocalizedMessage());
+                Helpers.showToast(this, task.getException().getLocalizedMessage());
             }
 
             changeInProgress(false);

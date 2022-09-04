@@ -1,4 +1,4 @@
-package com.example.notepro;
+package com.example.notepro.pages.notes;
 
 import android.os.Bundle;
 import android.widget.EditText;
@@ -6,7 +6,9 @@ import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.notepro.R;
 import com.example.notepro.models.Note;
+import com.example.notepro.utils.Helpers;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 
@@ -44,14 +46,14 @@ public class ShowNoteActivity extends AppCompatActivity {
     }
 
     void saveToFirebase(Note note) {
-        DocumentReference documentReference = Utility.getCollectionReferenceForNotes().document();
+        DocumentReference documentReference = Helpers.getCollectionReferenceForNotes().document();
 
         documentReference.set(note).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                Utility.showToast(this, "Note added successfully!");
+                Helpers.showToast(this, "Note added successfully!");
                 finish();
             } else {
-                Utility.showToast(this, "Failed to add note!");
+                Helpers.showToast(this, "Failed to add note!");
             }
         });
     }

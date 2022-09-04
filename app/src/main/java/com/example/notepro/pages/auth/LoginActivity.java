@@ -1,4 +1,4 @@
-package com.example.notepro;
+package com.example.notepro.pages.auth;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +11,9 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.notepro.MainActivity;
+import com.example.notepro.R;
+import com.example.notepro.utils.Helpers;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity {
@@ -57,10 +60,10 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(new Intent(this, MainActivity.class));
                     finish();
                 } else {
-                    Utility.showToast(this, "Email not verified.");
+                    Helpers.showToast(this, "Email not verified.");
                 }
             } else {
-                Utility.showToast(this, task.getException().getLocalizedMessage());
+                Helpers.showToast(this, task.getException().getLocalizedMessage());
             }
         });
     }

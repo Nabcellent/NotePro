@@ -5,10 +5,11 @@
       <map>
         <entry key="app/src/main/res/drawable/rounded_corner.xml" value="0.278" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.4015625" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.4015625" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.35625" />
         <entry key="app/src/main/res/layout/activity_register.xml" value="0.4015625" />
         <entry key="app/src/main/res/layout/activity_show_note.xml" value="0.35625" />
         <entry key="app/src/main/res/layout/activity_splash.xml" value="0.35625" />
+        <entry key="app/src/main/res/layout/recycler_note_item.xml" value="0.35520833333333335" />
       </map>
     </option>
   </component>
