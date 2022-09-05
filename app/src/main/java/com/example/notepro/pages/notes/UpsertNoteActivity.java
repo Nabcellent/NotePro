@@ -1,6 +1,7 @@
 package com.example.notepro.pages.notes;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -16,7 +17,7 @@ import com.google.firebase.firestore.DocumentReference;
 public class UpsertNoteActivity extends AppCompatActivity {
     EditText titleInput, contentInput;
     ImageButton saveBtn;
-    TextView pageTitle;
+    TextView pageTitle, deleteBtn;
     String title, content, docId;
     boolean isUpdate = false;
 
@@ -30,6 +31,7 @@ public class UpsertNoteActivity extends AppCompatActivity {
         titleInput = findViewById(R.id.title);
         contentInput = findViewById(R.id.content);
         saveBtn = findViewById(R.id.save_note_btn);
+        deleteBtn = findViewById(R.id.delete_btn);
 
         title = getIntent().getStringExtra("title");
         content = getIntent().getStringExtra("content");
@@ -43,9 +45,12 @@ public class UpsertNoteActivity extends AppCompatActivity {
             contentInput.setText(content);
 
             pageTitle.setText("Update Note");
+
+            deleteBtn.setVisibility(View.VISIBLE);
         }
 
         saveBtn.setOnClickListener(v -> saveNote());
+        deleteBtn.setOnClickListener(v -> deleteNote());
     }
 
     private void saveNote() {
@@ -82,6 +87,19 @@ public class UpsertNoteActivity extends AppCompatActivity {
             } else {
                 String msgStatus = isUpdate ? "create" : "update";
                 Helpers.showToast(this, "Failed to " + msgStatus + " note!");
+            }
+        });
+    }
+
+    void deleteNote() {
+        DocumentReference docRef = Helpers.getCollectionReferenceForNotes().document(docId);
+
+        docRef.delete().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Helpers.showToast(this, "Note destroyed successfully!");
+                finish();
+            } else {
+                Helpers.showToast(this, "Failed to destroy note!");
             }
         });
     }

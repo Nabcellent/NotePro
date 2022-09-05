@@ -66,4 +66,15 @@
             android:textColor="@color/black"
             android:textSize="20sp" />
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/delete_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:text="Destroy Note"
+        android:textColor="#ff0000"
+        android:textSize="18sp"
+        android:visibility="gone" />
 </RelativeLayout>

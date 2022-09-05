@@ -3,16 +3,19 @@ package com.example.notepro;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageButton;
+import android.widget.PopupMenu;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.notepro.models.Note;
+import com.example.notepro.pages.auth.LoginActivity;
 import com.example.notepro.pages.notes.UpsertNoteActivity;
 import com.example.notepro.utils.Helpers;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.Query;
 
 public class MainActivity extends AppCompatActivity {
@@ -37,7 +40,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void showMenu() {
+        PopupMenu popupMenu = new PopupMenu(this, this.menuBtn);
+        popupMenu.getMenu().add("Sign Out");
+        popupMenu.show();
 
+        popupMenu.setOnMenuItemClickListener(menuItem -> {
+            if (menuItem.getTitle() == "Sign Out") {
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(this, LoginActivity.class));
+                finish();
+
+                return true;
+            }
+
+            return false;
+        });
     }
 
     void setupRecyclerView() {
