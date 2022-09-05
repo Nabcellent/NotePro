@@ -1,6 +1,7 @@
 package com.example.notepro;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.notepro.models.Note;
+import com.example.notepro.pages.notes.UpsertNoteActivity;
 import com.example.notepro.utils.Helpers;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -34,6 +36,18 @@ public class NoteAdapter extends FirestoreRecyclerAdapter<Note, NoteAdapter.Note
         holder.titleText.setText(note.title);
         holder.contentText.setText(note.content);
         holder.timestampText.setText(Helpers.timestampToString(note.timestamp));
+
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, UpsertNoteActivity.class);
+            intent.putExtra("title", note.title);
+            intent.putExtra("content", note.content);
+
+            String uid = this.getSnapshots().getSnapshot(position).getId();
+
+            intent.putExtra("docId", uid);
+
+            context.startActivity(intent);
+        });
     }
 
     @NonNull

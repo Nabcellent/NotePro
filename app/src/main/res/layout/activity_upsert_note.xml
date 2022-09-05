@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/primary"
     android:padding="16dp"
-    tools:context=".pages.notes.ShowNoteActivity">
+    tools:context=".pages.notes.UpsertNoteActivity">
 
     <RelativeLayout
         android:id="@+id/title_bar"
@@ -17,7 +17,7 @@
             android:id="@+id/page_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Add Note"
+            android:text="Create Note"
             android:textColor="@color/white"
             android:textSize="32sp"
             android:textStyle="bold" />

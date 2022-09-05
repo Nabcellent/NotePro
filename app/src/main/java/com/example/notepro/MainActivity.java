@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.notepro.models.Note;
-import com.example.notepro.pages.notes.ShowNoteActivity;
+import com.example.notepro.pages.notes.UpsertNoteActivity;
 import com.example.notepro.utils.Helpers;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recycler_view);
         menuBtn = findViewById(R.id.menu_btn);
 
-        addNoteBtn.setOnClickListener(v -> startActivity(new Intent(this, ShowNoteActivity.class)));
+        addNoteBtn.setOnClickListener(v -> startActivity(new Intent(this, UpsertNoteActivity.class)));
         menuBtn.setOnClickListener(v -> showMenu());
 
         setupRecyclerView();

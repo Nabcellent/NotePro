@@ -3,6 +3,7 @@ package com.example.notepro.pages.notes;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,18 +13,37 @@ import com.example.notepro.utils.Helpers;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 
-public class ShowNoteActivity extends AppCompatActivity {
+public class UpsertNoteActivity extends AppCompatActivity {
     EditText titleInput, contentInput;
     ImageButton saveBtn;
+    TextView pageTitle;
+    String title, content, docId;
+    boolean isUpdate = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_show_note);
+        setContentView(R.layout.activity_upsert_note);
+
+        pageTitle = findViewById(R.id.page_title);
 
         titleInput = findViewById(R.id.title);
         contentInput = findViewById(R.id.content);
         saveBtn = findViewById(R.id.save_note_btn);
+
+        title = getIntent().getStringExtra("title");
+        content = getIntent().getStringExtra("content");
+        docId = getIntent().getStringExtra("docId");
+
+        //  Check if is an update action
+        if (docId != null && !docId.isEmpty()) isUpdate = true;
+
+        if (isUpdate) {
+            titleInput.setText(title);
+            contentInput.setText(content);
+
+            pageTitle.setText("Update Note");
+        }
 
         saveBtn.setOnClickListener(v -> saveNote());
     }
@@ -46,14 +66,22 @@ public class ShowNoteActivity extends AppCompatActivity {
     }
 
     void saveToFirebase(Note note) {
-        DocumentReference documentReference = Helpers.getCollectionReferenceForNotes().document();
+        DocumentReference docRef;
 
-        documentReference.set(note).addOnCompleteListener(task -> {
+        if (isUpdate) {
+            docRef = Helpers.getCollectionReferenceForNotes().document(docId);
+        } else {
+            docRef = Helpers.getCollectionReferenceForNotes().document();
+        }
+
+        docRef.set(note).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                Helpers.showToast(this, "Note added successfully!");
+                String msgStatus = isUpdate ? "created" : "updated";
+                Helpers.showToast(this, "Note " + msgStatus + " successfully!");
                 finish();
             } else {
-                Helpers.showToast(this, "Failed to add note!");
+                String msgStatus = isUpdate ? "create" : "update";
+                Helpers.showToast(this, "Failed to " + msgStatus + " note!");
             }
         });
     }

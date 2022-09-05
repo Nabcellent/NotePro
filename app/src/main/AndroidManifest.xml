@@ -14,7 +14,7 @@
         android:theme="@style/Theme.NotePro"
         tools:targetApi="31">
         <activity
-            android:name=".pages.notes.ShowNoteActivity"
+            android:name=".pages.notes.UpsertNoteActivity"
             android:exported="false" />
         <activity
             android:name=".pages.auth.LoginActivity"
